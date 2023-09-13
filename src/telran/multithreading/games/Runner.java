@@ -1,24 +1,23 @@
 package telran.multithreading.games;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 public class Runner extends Thread {
 private Race race;
 private int runnerId;
-private Instant startTime;
-public Runner(Race race, int runnerId, Instant startTime) {
+private Instant finishTime;
+public Runner(Race race, int runnerId) {
 	this.race = race;
 	this.runnerId = runnerId;
-	this.startTime = startTime;
-	
+}
+public int getRunnerId() {
+	return runnerId;
 }
 @Override
 public void run() {
 	int sleepRange = race.getMaxSleep() - race.getMinSleep() + 1;
 	int minSleep = race.getMinSleep();
 	int distance = race.getDistance();
-//	Instant start = Instant.now();
 	for (int i = 0; i < distance; i++) {
 		try {
 			sleep((long) (minSleep + Math.random() * sleepRange));
@@ -27,8 +26,16 @@ public void run() {
 		}
 		System.out.println(runnerId);
 	}
-	long raceTime = (long) ChronoUnit.MILLIS.between(startTime, Instant.now());
-	race.setWinners( runnerId,raceTime);
+	synchronized(race) {
+		finishTime = Instant.now();
+		finishRace();
+	}
+}
+private void finishRace() {
+	race.getResultsTable().add(this);
 
+}
+public Instant getFinsishTime() {
+	return finishTime;
 }
 }
