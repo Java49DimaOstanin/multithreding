@@ -1,25 +1,24 @@
 package telran.multithreading.games;
 
-import java.util.LinkedHashMap;
-
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Race {
 	private int distance;
 	private int minSleep;
 	private int maxSleep;
-	public LinkedHashMap<Integer,Long> winners;
+	private AtomicInteger winner = new AtomicInteger(-1);
 	public Race(int distance, int minSleep, int maxSleep) {
 		this.distance = distance;
 		this.minSleep = minSleep;
 		this.maxSleep = maxSleep;
-		this.winners = new LinkedHashMap<>();
 	}
-
-	public  void setWinners(Integer time,long raceTime) {
-		winners.put(time, raceTime);
+	public int getWinner() {
+		return winner.get();
 	}
-	public LinkedHashMap<Integer, Long> getWinners() {
-		return winners;
+	public void setWinner(AtomicInteger runnerId) {
+		if (this.winner.get() == -1) {
+			this.winner= runnerId;
+		}
 	}
 	public int getDistance() {
 		return distance;

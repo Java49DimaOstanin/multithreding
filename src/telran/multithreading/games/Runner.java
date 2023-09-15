@@ -1,34 +1,27 @@
 package telran.multithreading.games;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Runner extends Thread {
 private Race race;
-private int runnerId;
-private Instant startTime;
-public Runner(Race race, int runnerId, Instant startTime) {
+private AtomicInteger runnerId = new AtomicInteger();
+public Runner(Race race, int runnerId) {
 	this.race = race;
-	this.runnerId = runnerId;
-	this.startTime = startTime;
-	
+	this.runnerId.set(runnerId);
 }
 @Override
 public void run() {
 	int sleepRange = race.getMaxSleep() - race.getMinSleep() + 1;
 	int minSleep = race.getMinSleep();
 	int distance = race.getDistance();
-//	Instant start = Instant.now();
 	for (int i = 0; i < distance; i++) {
 		try {
 			sleep((long) (minSleep + Math.random() * sleepRange));
 		} catch (InterruptedException e) {
 			throw new IllegalStateException();
 		}
-		System.out.println(runnerId);
+		System.out.println("Runner # " + runnerId + "  distance= " + i );
 	}
-	long raceTime = (long) ChronoUnit.MILLIS.between(startTime, Instant.now());
-	race.setWinners( runnerId,raceTime);
-
+	race.setWinner(runnerId);
 }
 }
