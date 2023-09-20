@@ -4,10 +4,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Runner extends Thread {
 private Race race;
-private AtomicInteger runnerId = new AtomicInteger();
+private int runnerId;
 public Runner(Race race, int runnerId) {
 	this.race = race;
-	this.runnerId.set(runnerId);
+	this.runnerId =runnerId;
 }
 @Override
 public void run() {
@@ -22,6 +22,6 @@ public void run() {
 		}
 		System.out.println("Runner # " + runnerId + "  distance= " + i );
 	}
-	race.setWinner(runnerId);
+	race.winner.compareAndSet(-1, runnerId);
 }
 }
