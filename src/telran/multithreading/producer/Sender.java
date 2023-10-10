@@ -13,7 +13,7 @@ public class Sender extends Thread {
 	public void run() {
 		for (int i = 1; i <= nMessages; i++) {
 			try {
-				messageBox.put("message" + i);
+				messageBox.put("message " + i);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
