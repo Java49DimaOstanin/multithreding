@@ -5,24 +5,25 @@ import telran.multithreading.messaging.MessageBox;
 public class Receiver extends Thread {
 	private MessageBox messageBox;
 
+	public MessageBox getMessageBox() {
+			return messageBox;
+	}
+	public void setMessageBox(MessageBox messageBox) {
+		this.messageBox = messageBox;
+	}
 	public Receiver(MessageBox messageBox) {
 		setDaemon(true);//FIXME
 		this.messageBox = messageBox;
 	}
-	
+	public Receiver() {
+		this(null);
+	}
 	@Override
 	public void run() {
 		while(true) {//FIXME
 			try {
-				String message = messageBox.take();
-				if (message != null) {
-					int messageNumber = Integer.parseInt(message.split(" ")[1]); 
-					long threadId = getId(); 
-					if (messageNumber % 2 == threadId % 2) {
-						message = messageBox.get(); 
-						System.out.printf("Thread %d has got message: %s \n",threadId, message);
-					}
-				}
+				String message = messageBox.get();
+				System.out.printf("Thread %d has got message: %s\n ", getId(), message);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
