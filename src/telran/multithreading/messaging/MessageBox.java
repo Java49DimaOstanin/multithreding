@@ -1,13 +1,13 @@
 package telran.multithreading.messaging;
 
 public class MessageBox {
-	private	String message;
+	private String message;
 	public synchronized void put(String message) throws InterruptedException {
-		while (this.message != null ) {
+		while (this.message !=  null) {
 			this.wait();
 		}
 			this.message = message;
-			this.notifyAll(); // <- bug was here 
+			this.notifyAll();
 		
 	}
 	public synchronized String get() throws InterruptedException {
@@ -16,12 +16,10 @@ public class MessageBox {
 		}
 		String res = message;
 		message = null;
-		this.notify();
+		this.notifyAll();
 		return res;
 	}
 	public String take() {
 		return message;
 	}
-	
-
 }

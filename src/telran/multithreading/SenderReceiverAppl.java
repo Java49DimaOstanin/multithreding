@@ -1,45 +1,41 @@
 package telran.multithreading;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import telran.multithreading.consumer.Receiver;
 import telran.multithreading.messaging.MessageBox;
 import telran.multithreading.producer.Sender;
 
 public class SenderReceiverAppl {
 
-	private static final int N_MESSAGES = 100;
-	private static final int N_RECEIVERS = 50;
+	private static final int N_MESSAGES = 20;
+	private static final int N_RECEIVERS = 20;
 
 	public static void main(String[] args) throws InterruptedException {
 		MessageBox messageBox = new MessageBox();
 		Sender sender = new Sender(messageBox, N_MESSAGES);
 		sender.start();
-		List<Receiver> receivers = startReceivers(messageBox);
-		
-		sender.join(); // wait for sender to finish
-		
-		for (Receiver receiver : receivers) {
-//			receiver.join();
-			receiver.stopRunning(); // stop all receivers
-		}
-		
-//		Thread.sleep(200);
-//		System.out.println("finish");
+		Receiver[] receivers = new Receiver[N_RECEIVERS];
+		startReceivers(messageBox, receivers);
+		sender.join();
+		stopReceivers(receivers);
+
 	}
 
-	private static List<Receiver> startReceivers(MessageBox messageBox) {
-		List<Receiver> receivers = new ArrayList<>();
-		
-		for (int i = 0; i < N_RECEIVERS; i++) {
-			Receiver receiver = new Receiver(messageBox);
-			receiver.start();
-			receivers.add(receiver);
-			
+	
+
+	private static void stopReceivers(Receiver[] receivers) {
+		for(Receiver receiver: receivers) {
+			receiver.interrupt();
 		}
 		
-		return receivers;
+	}
+
+
+
+	private static void startReceivers(MessageBox messageBox, Receiver[] receivers) {
+		for(int i = 0; i < N_RECEIVERS; i++) {
+			receivers[i] = new Receiver(messageBox);
+			receivers[i].start();
+		}
 		
 	}
 
