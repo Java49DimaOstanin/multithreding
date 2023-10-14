@@ -3,8 +3,8 @@ package telran.multithreading.messaging;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class MessageBox {
-	private MyBlockingQueue<String> queue = new MyLinkedBlockingQueue<>(1);
+public class MessageBoxCW {
+	private BlockingQueue<String> queue = new LinkedBlockingQueue<>();
 	public  void put(String message) throws InterruptedException {
 		queue.put(message);
 		
