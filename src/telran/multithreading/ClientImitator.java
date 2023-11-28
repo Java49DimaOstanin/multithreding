@@ -14,8 +14,8 @@ public ClientImitator(int nRequests, long runningTime, BlockingQueue<Request> qu
 }
 
 @Override
-public void run() {
-	for(int i = 0; i < nRequests; i++) {
+ public void run() { 
+	for(int i =0; i < nRequests;i++) {
 		try {
 			queue.put(new Request(runningTime));
 		} catch (InterruptedException e) {
